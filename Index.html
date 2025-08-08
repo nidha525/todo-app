@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Routine Todo App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <button class="toggle-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <h1>Daily Routine Todo App</h1>
+
+    <div class="progress-bar">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+
+    <div class="form-row">
+      <input type="text" id="taskName" placeholder="Task Name">
+      <textarea id="taskNote" placeholder="Notes"></textarea>
+      <select id="priority">
+        <option value="High">High</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="Low">Low</option>
+      </select>
+      <input type="date" id="startDate">
+      <input type="date" id="dueDate">
+      <input type="time" id="reminderTime">
+      <select id="repeat">
+        <option value="None">None</option>
+        <option value="Daily">Daily</option>
+        <option value="Weekly">Weekly</option>
+      </select>
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="searchTask" placeholder="Search Task" oninput="renderTasks()">
+      <select id="filterPriority" onchange="renderTasks()">
+        <option value="All">All Priorities</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Task</th><th>Note</th><th>Start</th><th>Due</th><th>Reminder</th><th>Priority</th><th>Status</th><th>Repeat</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="taskTable"></tbody>
+    </table>
+
+    <div class="calendar">
+      <h2>Calendar View</h2>
+      <div id="calendarOutput"></div>
+    </div>
+  </div>
+
+  <script>
+    let tasks = [];
+    let darkMode = false;
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      darkMode = !darkMode;
+    }
+
+    function addTask() {
+      const task = {
+        id: Date.now(),
+        name: document.getElementById('taskName').value,
+        note: document.getElementById('taskNote').value,
+        priority: document.getElementById('priority').value,
+        start: document.getElementById('startDate').value,
+        due: document.getElementById('dueDate').value,
+        reminder: document.getElementById('reminderTime').value,
+        status: 'Pending',
+        repeat: document.getElementById('repeat').value
+      };
+
+      if (!task.name || !task.start || !task.due) return alert('Fill all fields!');
+      tasks.push(task);
+      renderTasks();
+      showCalendar();
+    }
+
+    function renderTasks() {
+      const tbody = document.getElementById('taskTable');
+      const search = document.getElementById('searchTask').value.toLowerCase();
+      const filter = document.getElementById('filterPriority').value;
+      let done = 0;
+      tbody.innerHTML = '';
+
+      tasks.forEach(task => {
+        if (
+          (!task.name.toLowerCase().includes(search)) ||
+          (filter !== 'All' && task.priority !== filter)
+        ) return;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${task.name}</td>
+          <td>${task.note}</td>
+          <td>${task.start}</td>
+          <td>${task.due}</td>
+          <td>${task.reminder || '-'}</td>
+          <td>${task.priority}</td>
+          <td>${task.status}</td>
+          <td>${task.repeat}</td>
+          <td>
+            <button onclick="toggleStatus(${task.id})">Toggle</button>
+            <button onclick="deleteTask(${task.id})">Delete</button>
+          </td>
+        `;
+        if (task.status === 'Completed') done++;
+        tbody.appendChild(tr);
+      });
+
+      const percent = tasks.length ? (done / tasks.length) * 100 : 0;
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function toggleStatus(id) {
+      const task = tasks.find(t => t.id === id);
+      task.status = task.status === 'Completed' ? 'Pending' : 'Completed';
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      renderTasks();
+    }
+
+    function showCalendar() {
+      const calendarDiv = document.getElementById('calendarOutput');
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let html = '<table><tr>';
+      const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      weekdays.forEach(d => html += `<th>${d}</th>`);
+      html += '</tr><tr>';
+
+      for (let i = 0; i < firstDay; i++) html += '<td></td>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const hasTask = tasks.some(t => t.start === dayStr || t.due === dayStr);
+        html += `<td style="background:${hasTask ? '#ffc' : ''}">${d}</td>`;
+        if ((d + firstDay) % 7 === 0) html += '</tr><tr>';
+      }
+      html += '</tr></table>';
+      calendarDiv.innerHTML = html;
+    }
+
+    // Reminder Check
+    setInterval(() => {
+      const now = new Date();
+      const timeStr = now.toTimeString().slice(0, 5);
+      tasks.forEach(task => {
+        if (task.reminder === timeStr && task.status === 'Pending') {
+          alert(`Reminder for task: ${task.name}`);
+        }
+      });
+    }, 60000);
+
+    // Init
+    renderTasks();
+    showCalendar();
+  
+    // ✅ Paste this updated showCalendar() function below:
+  function showCalendar() {
+    const calendarDiv = document.getElementById('calendarOutput');
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let html = '<table><tr>';
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    weekdays.forEach(d => html += `<th>${d}</th>`);
+    html += '</tr><tr>';
+
+    for (let i = 0; i < firstDay; i++) html += '<td></td>';
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dayStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dayTasks = tasks.filter(t => t.start === dayStr || t.due === dayStr);
+
+      let cellContent = `<strong>${d}</strong>`;
+      if (dayTasks.length) {
+        cellContent += '<ul style="padding-left: 16px; margin: 4px 0 0; font-size: 0.8em;">';
+        dayTasks.forEach(t => {
+          cellContent += `<li>${t.name}</li>`;
+        });
+        cellContent += '</ul>';
+      }
+
+      html += `<td>${cellContent}</td>`;
+      if ((d + firstDay) % 7 === 0) html += '</tr><tr>';
+    }
+
+    html += '</tr></table>';
+    calendarDiv.innerHTML = html;
+  }
+
+  // Reminder checking
+  setInterval(() => 60000);
+
+  renderTasks();
+  showCalendar(); // Initial call
+  </script>
+</body>
+</html>
