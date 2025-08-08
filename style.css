@@ -208,4 +208,39 @@ th {
 .dark-mode .calendar td li {
   color: #00e5ff;
 }
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .form-row,
+  .search-row {
+    flex-direction: column;
+  }
+
+  input,
+  select,
+  button,
+  textarea {
+    width: 100%;
+    flex: unset;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  th, td {
+    font-size: 14px;
+    padding: 6px;
+  }
+}
+
 
