@@ -330,3 +330,50 @@ th {
     font-size: 1em;
   }
 }
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .form-group,
+  input,
+  select,
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  th,
+  td {
+    padding: 6px;
+  }
+
+  .calendar {
+    overflow-x: auto;
+    display: block;
+  }
+
+  .calendar table {
+    min-width: 100%;
+  }
+}
+
