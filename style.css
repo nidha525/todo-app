@@ -208,6 +208,7 @@ th {
 .dark-mode .calendar td li {
   color: #00e5ff;
 }
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .form-row,
