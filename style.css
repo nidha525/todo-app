@@ -1,34 +1,38 @@
+/* General reset and font */
 body {
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  background-color: #d4faff;
   margin: 0;
   padding: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #d0faff;
 }
 
+/* Container for layout */
 .container {
   max-width: 800px;
-  margin: 0 auto;
-  background-color: white;
+  margin: auto;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  box-sizing: border-box;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Heading styles */
 h1 {
-  font-size: 28px;
+  font-size: 24px;
   text-align: center;
   margin-bottom: 20px;
-  word-break: break-word;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-input,
-select,
-button {
-  font-family: inherit;
+/* Form & input styles */
+input, select, button {
+  font-size: 16px;
   padding: 10px;
   margin: 5px 0;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #ccc;
   width: 100%;
   box-sizing: border-box;
@@ -39,83 +43,73 @@ button {
   color: white;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #0097a7;
+  background-color: #008fa1;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto;
+/* Dark mode toggle */
+button.dark-toggle {
+  display: block;
+  margin-bottom: 20px;
+  background-color: transparent;
+  border: 2px solid #00bcd4;
+  color: #00bcd4;
+  font-weight: bold;
 }
 
-th,
-td {
-  text-align: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-.calendar {
-  margin-top: 20px;
-  overflow-x: auto;
-}
-
-.toggle-mode {
-  float: right;
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  font-size: 14px;
-}
-
-.form-row {
+/* Filter & search bar */
+.filter-section {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
-.form-row > * {
-  flex: 1 1 45%;
+/* Table responsiveness */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
-/* ----------------- MOBILE VIEW ----------------- */
+th, td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
 
+/* Calendar view styling */
+.calendar {
+  margin-top: 30px;
+}
+
+.calendar table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Responsive layout */
 @media (max-width: 768px) {
-  .container {
-    padding: 10px;
-    margin: 10px;
-  }
-
   h1 {
-    font-size: 24px;
-    text-align: center;
+    font-size: 20px;
   }
 
-  .form-row {
+  .filter-section {
     flex-direction: column;
   }
 
-  .form-row > * {
-    flex: 1 1 100%;
-  }
-
-  table {
-    font-size: 12px;
-  }
-
-  .toggle-mode {
-    float: none;
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-  }
-
-  th,
-  td {
-    padding: 8px;
+  th, td {
+    font-size: 14px;
+    padding: 6px;
   }
 }
+
 
 
