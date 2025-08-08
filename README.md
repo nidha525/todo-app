@@ -24,7 +24,7 @@ A full-featured Todo App with calendar integration, reminders, priorities, dark 
 
 ## 🚀 Live Demo
 
-🌐 [Live Preview on GitHub Pages](https://nidha525.github.io/daily-todo-app/)
+🌐 [Live Preview on GitHub Pages](https://nidha525.github.todo-app/)
 
 ---
 
